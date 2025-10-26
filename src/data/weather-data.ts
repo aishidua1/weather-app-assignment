@@ -140,9 +140,7 @@ export const DUMMY_WEATHER_DATA: Record<string, WeatherData> = {
       },
     ],
   },
-
-  // new data
-  sf: {
+  "san francisco": {
     city: "San Francisco",
     latitude: 37.7749,
     longitude: 122.4194,
@@ -186,7 +184,7 @@ export const DUMMY_WEATHER_DATA: Record<string, WeatherData> = {
       },
     ],
   },
-  la: {
+  "los angeles": {
     city: "Los Angeles",
     latitude: 34.0549,
     longitude: 118.2426,

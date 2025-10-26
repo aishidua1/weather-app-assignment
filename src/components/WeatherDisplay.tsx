@@ -1,4 +1,4 @@
-import { WeatherCard } from "./WeatherCard";
+import  WeatherCard  from "./WeatherCard";
 import { Button } from "./ui/Button";
 import { WeatherData } from "@/types/weather";
 
