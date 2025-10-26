@@ -1,6 +1,7 @@
 import type { City } from "@/data/cities";
 import { CITIES } from "@/data/cities";
 import { DUMMY_WEATHER_DATA } from "@/data/weather-data";
+import type { CurrentWeather } from "@/types/weather";
 
 // Map whatever shape you have to a uniform shape the UI can use
 type Normalized = {
@@ -48,35 +49,54 @@ function normalizeWeather(raw: any): Normalized | null {
   };
 }
 
+// export default function AllCitiesPage() {
+//   return (
+//     <main className="mx-auto max-w-6xl px-4 py-10">
+//       <h1 className="text-3xl font-semibold mb-6">All Cities Weather</h1>
+
+//       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+//         {CITIES.map((city: City) => {
+//           const raw = DUMMY_WEATHER_DATA[city.name]; // keys must match city.name
+//           const data = normalizeWeather(raw);
+//           if (!data) return null;
+
+//           return (
+//             <div
+//               key={city.name}
+//               className="rounded-2xl border border-gray-300 p-5 shadow-sm bg-white hover:shadow-md transition"
+//             >
+//               <h2 className="text-xl font-medium mb-2">{city.name}</h2>
+//               <p className="text-5xl font-semibold">{data.temp}°</p>
+//               <p className="text-gray-600 mb-1">{data.condition}</p>
+//               <p className="text-sm text-gray-500">
+//                 High {data.high}° • Low {data.low}°
+//               </p>
+//               <p className="text-sm text-gray-500 mt-2">
+//                 Humidity {data.humidity}% • Wind {data.wind} mph
+//               </p>
+//             </div>
+//           );
+//         })}
+//       </div>
+//     </main>
+//   );
+// }
+
+
+import CityGrid from "@/components/CityCard";
+
 export default function AllCitiesPage() {
-  return (
-    <main className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-3xl font-semibold mb-6">All Cities Weather</h1>
-
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {CITIES.map((city: City) => {
-          const raw = DUMMY_WEATHER_DATA[city.name]; // keys must match city.name
-          const data = normalizeWeather(raw);
-          if (!data) return null;
-
-          return (
-            <div
-              key={city.name}
-              className="rounded-2xl border border-gray-300 p-5 shadow-sm bg-white hover:shadow-md transition"
-            >
-              <h2 className="text-xl font-medium mb-2">{city.name}</h2>
-              <p className="text-5xl font-semibold">{data.temp}°</p>
-              <p className="text-gray-600 mb-1">{data.condition}</p>
-              <p className="text-sm text-gray-500">
-                High {data.high}° • Low {data.low}°
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Humidity {data.humidity}% • Wind {data.wind} mph
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    </main>
-  );
-}
+    const items = CITIES
+      .map((c: City) => {
+        const w = DUMMY_WEATHER_DATA[c.name.toLowerCase()]?.current as CurrentWeather | undefined;
+        return w ? { city: c.name, weather: w } : null;
+      })
+      .filter(Boolean) as { city: string; weather: CurrentWeather }[];
+  
+    return (
+      <main className="mx-auto max-w-6xl px-4 py-10">
+        <h1 className="text-3xl font-semibold mb-6">All Cities Weather</h1>
+        <CityGrid items={items} />
+      </main>
+    );
+  }
