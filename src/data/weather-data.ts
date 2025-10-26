@@ -140,6 +140,184 @@ export const DUMMY_WEATHER_DATA: Record<string, WeatherData> = {
       },
     ],
   },
+
+  // new data
+  sf: {
+    city: "San Francisco",
+    latitude: 37.7749,
+    longitude: 122.4194,
+    current: {
+      temperature: 62,
+      feelsLike: 60,
+      humidity: 48,
+      windSpeed: 8,
+      condition: {
+        code: 1,
+        description: "Cloudy",
+      },
+    },
+    forecast: [
+      {
+        date: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+        maxTemp: 65,
+        minTemp: 40,
+        condition: {
+          code: 0,
+          description: "Cloudy",
+        },
+      },
+      {
+        date: new Date(Date.now() + 172800000).toISOString().split("T")[0],
+        maxTemp: 69,
+        minTemp: 58,
+        condition: {
+          code: 2,
+          description: "Partly cloudy",
+        },
+      },
+      {
+        date: new Date(Date.now() + 259200000).toISOString().split("T")[0],
+        maxTemp: 63,
+        minTemp: 54,
+        condition: {
+          code: 63,
+          description: "Moderate rain",
+        },
+      },
+    ],
+  },
+  la: {
+    city: "Los Angeles",
+    latitude: 34.0549,
+    longitude: 118.2426,
+    current: {
+      temperature: 72,
+      feelsLike: 70,
+      humidity: 58,
+      windSpeed: 5,
+      condition: {
+        code: 1,
+        description: "Mainly clear",
+      },
+    },
+    forecast: [
+      {
+        date: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+        maxTemp: 77,
+        minTemp: 66,
+        condition: {
+          code: 0,
+          description: "Clear sky",
+        },
+      },
+      {
+        date: new Date(Date.now() + 172800000).toISOString().split("T")[0],
+        maxTemp: 79,
+        minTemp: 68,
+        condition: {
+          code: 2,
+          description: "Partly cloudy",
+        },
+      },
+      {
+        date: new Date(Date.now() + 259200000).toISOString().split("T")[0],
+        maxTemp: 73,
+        minTemp: 64,
+        condition: {
+          code: 63,
+          description: "Moderate rain",
+        },
+      },
+    ],
+  },
+  portland: {
+    city: "Portland",
+    latitude: 45.5152,
+    longitude: 122.6784,
+    current: {
+      temperature: 70,
+      feelsLike: 70,
+      humidity: 58,
+      windSpeed: 5,
+      condition: {
+        code: 1,
+        description: "Mainly clear",
+      },
+    },
+    forecast: [
+      {
+        date: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+        maxTemp: 67,
+        minTemp: 56,
+        condition: {
+          code: 0,
+          description: "Clear sky",
+        },
+      },
+      {
+        date: new Date(Date.now() + 172800000).toISOString().split("T")[0],
+        maxTemp: 69,
+        minTemp: 58,
+        condition: {
+          code: 2,
+          description: "Partly cloudy",
+        },
+      },
+      {
+        date: new Date(Date.now() + 259200000).toISOString().split("T")[0],
+        maxTemp: 73,
+        minTemp: 64,
+        condition: {
+          code: 63,
+          description: "Moderate rain",
+        },
+      },
+    ],
+  },
+  seattle: {
+    city: "Seattle",
+    latitude: 47.6061,
+    longitude: 122.3328,
+    current: {
+      temperature: 72,
+      feelsLike: 70,
+      humidity: 58,
+      windSpeed: 5,
+      condition: {
+        code: 1,
+        description: "Mainly clear",
+      },
+    },
+    forecast: [
+      {
+        date: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+        maxTemp: 77,
+        minTemp: 66,
+        condition: {
+          code: 0,
+          description: "Clear sky",
+        },
+      },
+      {
+        date: new Date(Date.now() + 172800000).toISOString().split("T")[0],
+        maxTemp: 79,
+        minTemp: 68,
+        condition: {
+          code: 2,
+          description: "Partly cloudy",
+        },
+      },
+      {
+        date: new Date(Date.now() + 259200000).toISOString().split("T")[0],
+        maxTemp: 73,
+        minTemp: 64,
+        condition: {
+          code: 63,
+          description: "Moderate rain",
+        },
+      },
+    ],
+  },
 };
 
 export function getDummyWeatherData(cityName: string): WeatherData | null {
