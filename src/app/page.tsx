@@ -60,3 +60,22 @@ export default function Home() {
   );
   
 }
+
+// import WeatherCard from "@/app/components/WeatherCard";
+// import { CITIES } from "@/data/cities";
+// import { DUMMY_WEATHER_DATA } from "@/data/weather-data";
+// import type { CurrentWeather } from "@/types/weather";
+
+// // ...inside your component's JSX, under header/search:
+// <section className="mt-10">
+//   <h2 className="mb-4 text-xl font-semibold">Featured Cities</h2>
+//   <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+//     {CITIES.slice(0, 6).map((c) => {
+//       const w = DUMMY_WEATHER_DATA[c.name] as CurrentWeather | undefined; // keys must match c.name
+//       if (!w) return null;
+//       return <WeatherCard key={c.name} city={c.name} weather={w} />;
+//     })}
+//   </div>
+// </section>
+
+
