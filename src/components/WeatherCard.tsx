@@ -1,3 +1,4 @@
+"use client";
 // import { CurrentWeather } from "@/types/weather";
 
 // /**
@@ -23,9 +24,9 @@
 //   );
 // }
 
-"use client";
 
-import type { CurrentWeather } from "@/types/weather";
+
+import type { CurrentWeather } from "../types/weather";
 
 interface WeatherCardProps {
   city: string;

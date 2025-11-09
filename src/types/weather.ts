@@ -6,9 +6,11 @@
  */
 
 export interface WeatherCondition {
+  weather: CurrentWeather
   code: number;
   description: string;
 }
+
 
 export interface CurrentWeather {
   temperature: number; // in Fahrenheit

@@ -1,5 +1,5 @@
-import WeatherCard from "@/components/WeatherCard";
-import type { CurrentWeather } from "@/types/weather";
+import WeatherCard from "./WeatherCard";                 
+import type { CurrentWeather } from "../types/weather";   
 
 export type CityItem = {
   city: string;
