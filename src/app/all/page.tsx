@@ -59,7 +59,7 @@ function normalizeWeather(raw: any): Normalized | null {
 export default function AllCitiesPage() {
     const items = CITIES
       .map((c: City) => {
-        const w = DUMMY_WEATHER_DATA[c.name.toLowerCase()]?.current as CurrentWeather | undefined;
+        const w = DUMMY_WEATHER_DATA[c.name.toLowerCase()]?.current_weather as CurrentWeather | undefined;
         return w ? { city: c.name, weather: w } : null;
       })
       .filter(Boolean) as { city: string; weather: CurrentWeather }[];
@@ -71,7 +71,3 @@ export default function AllCitiesPage() {
       </main>
     );
   }
-
-
-
-
