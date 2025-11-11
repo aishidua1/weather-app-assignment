@@ -11,11 +11,6 @@ import { WeatherData } from "@/types/weather";
 import { CITIES } from "@/data/cities";
 
 // Default city to display on load
-const DEFAULT_CITY = "Durham";
-
-const [selectedCity, setSelectedCity] = useState(() =>
-  CITIES.find(c => c.name.toLowerCase() === DEFAULT_CITY.toLowerCase())
-);
 
 
 export default function Home() {
@@ -25,6 +20,10 @@ export default function Home() {
   const [isFahrenheit, setIsFahrenheit] = useState(false);
 
   const toggleTempUnit = () => setIsFahrenheit((prev) => !prev);
+  const DEFAULT_CITY = "Durham";
+  const [selectedCity, setSelectedCity] = useState(() =>
+  CITIES.find(c => c.name.toLowerCase() === DEFAULT_CITY.toLowerCase())
+);
 
   useEffect(() => {
     // Load default city weather on mount
