@@ -1,8 +1,14 @@
+// export type CurrentWeather = {
+//   temperature: number;
+//   windspeed: number;
+//   weatherCode: number;
+//   time: string;
+// };
+
 export type CurrentWeather = {
-  temperature: number;
-  windspeed: number;
-  weatherCode: number;
-  time: string;
+  temperature: number;   // °F if you requested fahrenheit in the API
+  windspeed: number;     // km/h (Open-Meteo default)
+  weatherCode: number;   // Open-Meteo current_weather.weathercode
 };
 
 export type HourlyWeather = {
