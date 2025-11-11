@@ -31,7 +31,7 @@ type WeatherCardProps = {
 };
 
 export default function WeatherCard({ city, weather }: WeatherCardProps) {
-  const desc = codeToText(weather.weathercode);
+  const desc = codeToText(weather.weatherCode);
 
   return (
     <article className="group rounded-2xl border border-zinc-200/70 bg-gradient-to-br p-5 shadow-sm transition hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 // adjust the path if you use path aliases; this relative path works with your tree
-import { CITIES } from "../../../data/cities";
+import { CITIES } from "@/data/cities";
 
 type Params = { city: string };
 

@@ -28,7 +28,7 @@ export default function WeatherDisplay({ weather, title }: Props) {
   const toggleUnit = () => setIsFahrenheit((prev) => !prev);
 
   const now = weather.current_weather;
-  const desc = codeToText(now.weathercode);
+  const desc = codeToText(now.weatherCode);
   const humidity = weather.hourly?.relative_humidity_2m?.[0] ?? undefined;
 
   return (
