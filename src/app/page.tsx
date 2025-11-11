@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { LocationSearch } from "@/components/LocationSearch";
 import { LoadingState } from "@/components/LoadingState";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { WeatherDisplay } from "@/components/WeatherDisplay";
+import  WeatherDisplay  from "@/components/WeatherDisplay";
 import { PageHeader } from "@/components/PageHeader";
-import { getWeatherData } from "@/lib/getWeather";
+import { getWeather } from "@/lib/getWeather";
 import { WeatherData } from "@/types/weather";
+import { CITIES } from "@/data/cities";
 
 // Default city to display on load
 const DEFAULT_CITY = "Durham";
@@ -16,66 +17,87 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isFahrenheit, setIsFahrenheit] = useState(false);
+
+  const toggleTempUnit = () => setIsFahrenheit((prev) => !prev);
 
   useEffect(() => {
     // Load default city weather on mount
     loadCityWeather(DEFAULT_CITY);
   }, []);
 
-  const loadCityWeather = (cityName: string) => {
+  const loadCityWeather = async (cityName: string) => {
     setLoading(true);
     setError("");
 
-    const data = getWeatherData(cityName);
+    const city = CITIES.find(
+      (c) => c.name.toLowerCase() === cityName.toLowerCase()
+    );
 
-    if (data) {
-      setWeather(data);
-    } else {
-      setError(`Failed to load weather data for ${cityName}`);
+    if (!city) {
+      setWeather(null);
+      setError(`Unknown city: ${cityName}`);
+      setLoading(false);
+      return;
     }
-
-    setLoading(false);
+    try {
+      const data = await getWeather(city.latitude, city.longitude); // expects lat, lon
+      setWeather(data); // data matches WeatherData shape
+    } catch (e) {
+      setWeather(null);
+      setError(`Failed to load weather data for ${cityName}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4 py-12">
-      <main className="w-full max-w-2xl space-y-8">
-        {/* Header */}
-        <PageHeader
-          title="Weather App"
-          subtitle="Simple weather forecast for your city"
-        />
+  <div className="mx-auto max-w-3xl px-4 py-14">
+    <header className="mb-10 text-center">
+      <h1 className="text-4xl font-semibold tracking-tight">Weather App</h1>
+      <p className="mt-2 text-zinc-400">Simple weather forecast for your city</p>
+    </header>
 
-        {/* Search at the top */}
-        <div className="flex flex-col items-center">
-          <LocationSearch onCitySelect={loadCityWeather} />
-        </div>
-
-        {/* Weather display */}
-        {loading && <LoadingState />}
-        {error && <ErrorMessage message={error} />}
-        {weather && !loading && <WeatherDisplay weather={weather} />}
-      </main>
+    {/* City select */}
+    <div className="mb-8 flex justify-center">
+      <div className="relative w-full max-w-sm">
+        <select
+          className="w-full appearance-none rounded-xl border border-zinc-700/60 bg-zinc-900/60 px-4 py-3 pr-10 text-sm text-zinc-100 shadow-inner focus:border-zinc-500 focus:outline-none"
+          onChange={(e) => loadCityWeather(e.target.value)}
+          defaultValue={DEFAULT_CITY}
+        >
+          {CITIES.map((c) => (
+            <option key={c.name} value={c.name}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500">▾</span>
+      </div>
     </div>
-  );
-  
+
+    <div className="mb-6 flex items-center justify-end gap-2 text-sm text-zinc-400">
+      <span className={isFahrenheit ? "opacity-50" : "text-white"}>°C</span>
+      <button
+        onClick={toggleTempUnit}
+        className="relative inline-flex h-5 w-9 items-center rounded-full bg-zinc-700 transition"
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+            isFahrenheit ? "translate-x-4" : "translate-x-1"
+          }`}
+        />
+      </button>
+      <span className={isFahrenheit ? "text-white" : "opacity-50"}>°F</span>
+    </div>
+
+    {/* Content card */}
+    <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/40 p-6 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.6)] backdrop-blur">
+      {loading && <LoadingState />}
+      {error && <ErrorMessage message={error} />}
+      {weather && !loading && <WeatherDisplay weather={weather} />}
+    </div>
+  </div>
+);
+
 }
-
-// import WeatherCard from "@/app/components/WeatherCard";
-// import { CITIES } from "@/data/cities";
-// import { DUMMY_WEATHER_DATA } from "@/data/weather-data";
-// import type { CurrentWeather } from "@/types/weather";
-
-// // ...inside your component's JSX, under header/search:
-// <section className="mt-10">
-//   <h2 className="mb-4 text-xl font-semibold">Featured Cities</h2>
-//   <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-//     {CITIES.slice(0, 6).map((c) => {
-//       const w = DUMMY_WEATHER_DATA[c.name] as CurrentWeather | undefined; // keys must match c.name
-//       if (!w) return null;
-//       return <WeatherCard key={c.name} city={c.name} weather={w} />;
-//     })}
-//   </div>
-// </section>
-
-

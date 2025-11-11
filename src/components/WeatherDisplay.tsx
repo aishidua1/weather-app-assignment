@@ -1,109 +1,121 @@
-// // import WeatherCard from "./WeatherCard";
-// // import { Button } from "./Button";
-// // import type { CurrentWeather } from "../types/weather";
+import type { WeatherData } from "@/types/weather";
+import { useState } from "react";
 
-
-// // type CityCurrent = {
-// //   city: string;
-// //   current: CurrentWeather;
-// // };
-
-// // interface WeatherDisplayProps {
-// //   weather: CityCurrent;   
-// // }
-
-// // export function WeatherDisplay({ weather }: WeatherDisplayProps) {
-// //   return (
-// //     <div className="flex flex-col items-center space-y-6">
-// //       <WeatherCard city={weather.city} weather={weather.current} />
-// //       <Button href={`/weather/${weather.city.toLowerCase()}`} variant="default">
-// //         View Detailed Forecast
-// //       </Button>
-// //     </div>
-// //   );
-// // }
-
-
-// // // /**
-// // //  * Displays weather information with a link to detailed forecast
-// // //  */
-
-// // // interface WeatherDisplayProps {
-// // //   weather: WeatherData;
-// // // }
-
-// // // export function WeatherDisplay({ weather }: WeatherDisplayProps) {
-// // //   return (
-// // //     <div className="flex flex-col items-center space-y-6">
-// // //       <WeatherCard city={weather.city} weather={weather.current} />
-
-// // //       {/* Link to detailed weather */}
-// // //       <Button href={`/weather/${weather.city.toLowerCase()}`} variant="default">
-// // //         View Detailed Forecast
-// // //       </Button>
-// // //     </div>
-// // //   );
-// // // }
-
-
-// import WeatherCard from "./WeatherCard";
-// import { Button } from "./Button";
-// import type { CurrentWeather } from "../types/weather";
-
-// type CityCurrent = { city: string; current: CurrentWeather };
-
-// interface WeatherDisplayProps {
-//   weather: CityCurrent;
-// }
-
-// export function WeatherDisplay({ weather }: WeatherDisplayProps) {
-//   const slug = (weather?.city ?? "").toLowerCase(); 
-//   return (
-//     <div className="flex flex-col items-center space-y-6">
-//       <WeatherCard city={weather.city} weather={weather.current} />
-//       {slug && (
-//         <Button href={`/weather/${encodeURIComponent(slug)}`} variant="default">
-//           View Detailed Forecast
-//         </Button>
-//       )}
-//     </div>
-//   );
-// }
-
-// import Link from "next/link";
-
-// // if your city control stores something like "Durham"
-// <Link href={`/weather/${encodeURIComponent(city)}`}>
-//   <button>View Detailed Forecast</button>
-// </Link>
-
-
-// src/components/WeatherDisplay.tsx
-type City = { name: string; latitude: number; longitude: number };
-
-type WeatherDisplayProps = {
-  city: City;
-  data: any; // narrow later if you like
+type Props = {
+  weather: WeatherData;
+  title?: string;
 };
 
-export default function WeatherDisplay({ city, data }: WeatherDisplayProps) {
-  return (
-    <div className="p-4 bg-gray-800 rounded-2xl shadow">
-      <h2 className="text-xl font-semibold mb-3">{city.name}</h2>
+// Convert °C ↔ °F
+function toF(tempC: number) {
+  return (tempC * 9) / 5 + 32;
+}
 
-      <div className="space-y-1">
-        <div>Now: {data?.current_weather?.temperature}°C</div>
-        <div>Wind: {data?.current_weather?.windspeed} km/h</div>
+const codeToText = (code?: number) => {
+  if (code === 0) return "Clear";
+  if ([1, 2, 3].includes(code ?? -1)) return "Cloudy";
+  if ([45, 48].includes(code ?? -1)) return "Fog";
+  if ([51, 53, 55].includes(code ?? -1)) return "Drizzle";
+  if ([61, 63, 65].includes(code ?? -1)) return "Rain";
+  if ([71, 73, 75].includes(code ?? -1)) return "Snow";
+  if ([95, 96, 99].includes(code ?? -1)) return "Thunderstorm";
+  return "—";
+};
+
+export default function WeatherDisplay({ weather, title }: Props) {
+  const [isFahrenheit, setIsFahrenheit] = useState(false);
+  const toggleUnit = () => setIsFahrenheit((prev) => !prev);
+
+  const now = weather.current_weather;
+  const desc = codeToText(now.weathercode);
+  const humidity = weather.hourly?.relative_humidity_2m?.[0] ?? undefined;
+
+  return (
+    <div className="space-y-6">
+      {/* Top row: big temp + summary */}
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          {title ? (
+            <h2 className="text-2xl font-medium">{title}</h2>
+          ) : null}
+          <div className="mt-1 text-zinc-400">{desc}</div>
+          <div className="mt-4 text-6xl font-semibold leading-none">
+            {Math.round(
+              isFahrenheit ? toF(now.temperature) : now.temperature
+            )}
+            °
+            <span className="ml-1 align-top text-2xl text-zinc-400">
+              {isFahrenheit ? "F" : "C"}
+            </span>
+          </div>
+        </div>
+
+        {/* °C ↔ °F toggle */}
+        <div className="flex items-center gap-2 text-sm text-zinc-400">
+          <span className={!isFahrenheit ? "text-white" : "opacity-50"}>
+            °C
+          </span>
+          <button
+            onClick={toggleUnit}
+            className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
+              isFahrenheit ? "bg-blue-500" : "bg-zinc-700"
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                isFahrenheit ? "translate-x-4" : "translate-x-1"
+              }`}
+            />
+          </button>
+          <span className={isFahrenheit ? "text-white" : "opacity-50"}>
+            °F
+          </span>
+        </div>
       </div>
 
-      <h3 className="font-medium mt-4 mb-2">Next hours (temperature)</h3>
-      <ul className="text-sm space-y-1">
-        {data?.hourly?.time?.slice(0, 12).map((t: string, i: number) => (
-          <li key={t}>
-            {t}: {data.hourly.temperature_2m[i]} °C
-          </li>
-        ))}
-      </ul>
+      {/* Badges */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/40 px-4 py-3 text-center">
+          <div className="text-xs uppercase tracking-wide text-zinc-400">
+            Wind
+          </div>
+          <div className="text-lg font-medium">
+            {Math.round(now.windspeed)} km/h
+          </div>
+        </div>
+        <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/40 px-4 py-3 text-center">
+          <div className="text-xs uppercase tracking-wide text-zinc-400">
+            Humidity
+          </div>
+          <div className="text-lg font-medium">
+            {humidity ?? "—"}
+            {humidity !== undefined ? "%" : ""}
+          </div>
+        </div>
+      </div>
+
+      {/* Hourly List */}
+      <div>
+        <h3 className="mb-3 text-sm font-medium text-zinc-300">
+          Next hours (temperature)
+        </h3>
+        <ul className="max-h-64 space-y-1 overflow-auto pr-1 text-sm text-zinc-300/90">
+          {weather.hourly.time.slice(0, 24).map((t, i) => (
+            <li
+              key={t}
+              className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-zinc-800/40"
+            >
+              <span className="tabular-nums">{t.replace("T", " ")}</span>
+              <span className="ml-6 font-medium">
+                {isFahrenheit
+                  ? toF(weather.hourly.temperature_2m[i]).toFixed(1)
+                  : weather.hourly.temperature_2m[i].toFixed(1)}{" "}
+                °{isFahrenheit ? "F" : "C"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

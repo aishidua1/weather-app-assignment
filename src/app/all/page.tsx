@@ -9,6 +9,9 @@ import type { City } from "../../data/cities";
 import { CITIES } from "../../data/cities";
 import { DUMMY_WEATHER_DATA } from "../../data/weather-data";
 import type { CurrentWeather } from "../../types/weather";
+import WeatherDisplay from "@/components/WeatherDisplay";
+import { getWeather } from "@/lib/getWeather";
+import type { WeatherData } from "@/types/weather";
 
 // Map whatever shape you have to a uniform shape the UI can use
 type Normalized = {
